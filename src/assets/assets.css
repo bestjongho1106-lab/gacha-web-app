@@ -1,0 +1,124 @@
+/* Currency Styles */
+.currency-item {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+  font-weight: bold;
+}
+
+.currency-item:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.4);
+}
+
+.bill {
+  width: 120px;
+  height: 60px;
+  border: 1px solid rgba(0,0,0,0.2);
+}
+
+.bill-1000 {
+  background-color: #d0e0f0; /* Light blue */
+  color: #345a7d;
+}
+
+.bill-5000 {
+  background-color: #f0e0d0; /* Light orange */
+  color: #8c5a2b;
+}
+
+.bill-10000 {
+  background-color: #d0f0d0; /* Light green */
+  color: #3a7d34;
+}
+
+/* Coin Styles */
+.coin {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  border: 2px solid;
+  font-size: 0.9rem;
+}
+
+.coin-10 {
+  background-color: #d2a679; /* Copper */
+  color: #5d3a1a;
+  border-color: #b08d57;
+  width: 50px; /* Smaller */
+  height: 50px;
+}
+
+.coin-50 {
+  background-color: #e0e0e0; /* Silver */
+  color: #444;
+  border-color: #b0b0b0;
+  width: 55px;
+  height: 55px;
+}
+
+.coin-100 {
+  background-color: #e0e0e0; /* Silver */
+  color: #444;
+  border-color: #b0b0b0;
+}
+
+.coin-500 {
+  background-color: #f0e68c; /* Gold */
+  color: #6b4f0c;
+  border-color: #c9b037;
+}
+
+/* Drink Can Style */
+.drink-can {
+  position: relative;
+  width: 60px;
+  height: 100px;
+  background: linear-gradient(to right, #e0e0e0, #f8f8f8, #e0e0e0);
+  border-radius: 5px;
+  border-top: 4px solid #c0c0c0;
+  border-bottom: 4px solid #c0c0c0;
+  margin: 10px;
+}
+
+.drink-can::before {
+  content: '';
+  position: absolute;
+  top: -8px;
+  left: 10%;
+  width: 80%;
+  height: 8px;
+  background: #c0c0c0;
+  border-radius: 3px 3px 0 0;
+}
+
+.drink-can::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 10%;
+  width: 80%;
+  height: 8px;
+  background: #c0c0c0;
+  border-radius: 0 0 3px 3px;
+}
+
+.can-label {
+  position: absolute;
+  top: 15%;
+  left: 0;
+  width: 100%;
+  height: 70%;
+  background-color: #ff6b6b; /* Default color */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: white;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+}

@@ -1,0 +1,215 @@
+/* General App Layout */
+.App {
+  text-align: center;
+}
+
+.App-header {
+  padding: 20px;
+  background-color: #1a1d24;
+  margin-bottom: 2rem;
+}
+
+.main-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 2rem;
+  padding: 1rem;
+}
+
+/* Vending Machine Area */
+.vending-machine-area {
+  flex-basis: 50%;
+  position: relative; /* For animation positioning */
+}
+
+.vending-machine-placeholder {
+  background-color: #3a3f4b;
+  border: 5px solid #2a2d35;
+  border-radius: 20px;
+  width: 100%;
+  max-width: 500px;
+  height: 70vh;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.3), inset 0 0 15px rgba(0,0,0,0.5);
+}
+
+.drink-display {
+  width: 80%;
+  height: 70%;
+  background-color: #282c34;
+  border-radius: 10px;
+  border: 3px solid #555;
+  box-shadow: inset 0 0 10px rgba(0,0,0,0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: auto; /* Changed from hidden to auto */
+  flex-wrap: wrap; /* Added */
+  gap: 10px; /* Added */
+  padding: 10px; /* Added for spacing */
+}
+
+/* Control Panel */
+.control-panel {
+  flex-basis: 40%;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  max-width: 400px;
+}
+
+.status-display {
+  background-color: #3a3f4b;
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.status-display p {
+  margin: 0.5rem 0;
+  font-size: 1.2rem;
+  display: flex;
+  justify-content: space-between;
+}
+
+.status-display span {
+  font-weight: bold;
+  color: #61dafb;
+}
+
+/* Buttons */
+.draw-buttons, .money-insert-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.money-insert-buttons {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 1rem;
+}
+
+.money-insert-section p {
+  margin-bottom: 0.5rem;
+  font-size: 1.1rem;
+  text-align: left;
+}
+
+button {
+  background-color: #61dafb;
+  color: #282c34;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 16px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+button:hover:not(:disabled) {
+  background-color: #88e1fc;
+}
+
+button:active:not(:disabled) {
+  transform: translateY(2px);
+  box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+}
+
+button:disabled {
+  background-color: #555;
+  color: #999;
+  cursor: not-allowed;
+}
+
+/* Message Box */
+.message-box {
+  background-color: #20232a;
+  border-radius: 8px;
+  padding: 1rem;
+  height: 150px;
+  overflow-y: auto;
+  text-align: left;
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.3);
+}
+
+.message-box p {
+  margin: 0.3rem 0;
+  font-size: 0.9rem;
+  border-bottom: 1px solid #3a3f4b;
+  padding-bottom: 0.3rem;
+}
+
+/* --- Animations --- */
+@keyframes pop-in {
+  0% {
+    transform: scale(0.5);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.drink-can {
+  animation: pop-in 0.3s ease-out;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+  20%, 40%, 60%, 80% { transform: translateX(5px); }
+}
+
+.vending-machine-placeholder.shake {
+  animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
+}
+
+/* --- Won Drinks Display --- */
+.won-drinks-display {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  gap: 1rem;
+}
+
+.won-drinks-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+.click-to-continue {
+  margin-top: 1rem;
+  font-size: 1rem;
+  color: #61dafb;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 0.7;
+  }
+  50% {
+    opacity: 1;
+    text-shadow: 0 0 5px rgba(97, 218, 251, 0.7);
+  }
+  100% {
+    opacity: 0.7;
+  }
+}
