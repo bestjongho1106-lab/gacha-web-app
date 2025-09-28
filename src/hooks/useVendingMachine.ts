@@ -40,9 +40,9 @@ export const useVendingMachine = () => {
 
     setBalance(prev => prev - cost);
 
-    if (Math.random() < chance) {
+    if (Math.random() < chance) { // Lucky Win
       addMessage(`🎉 축하합니다! 음료수에 당첨되었습니다! 🎉`);
-      // If pity threshold is reached, a win consumes one pity charge.
+      // If pity threshold is reached, a lucky win still consumes one pity charge.
       // Otherwise, a lucky win resets the progress.
       if (pityProgress >= PITY_THRESHOLD) {
         setPityProgress(prev => prev - PITY_THRESHOLD);
@@ -50,10 +50,19 @@ export const useVendingMachine = () => {
         setPityProgress(0);
       }
       return true;
-    } else {
+    } else { // Loss
       addMessage("아쉽지만... 꽝입니다. 😢");
-      setPityProgress(prev => prev + cost); // Accumulate on fail
-      return false;
+      const newPityProgress = pityProgress + cost;
+
+      // Check if the loss triggers a pity win
+      if (newPityProgress >= PITY_THRESHOLD) {
+        addMessage('천장 도달! 음료수가 나옵니다!');
+        setPityProgress(newPityProgress - PITY_THRESHOLD);
+        return true; // A pity win is still a win
+      } else {
+        setPityProgress(newPityProgress);
+        return false;
+      }
     }
   };
 
@@ -99,7 +108,7 @@ export const useVendingMachine = () => {
         return 0;
     }
     addMessage('천장 도달! 무료 확정 뽑기를 진행합니다!');
-    setPityProgress(0);
+    setPityProgress(prev => prev - PITY_THRESHOLD);
     return 1;
   }
 
