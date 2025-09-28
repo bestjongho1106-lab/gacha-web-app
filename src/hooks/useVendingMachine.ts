@@ -42,8 +42,11 @@ export const useVendingMachine = () => {
 
     if (Math.random() < chance) {
       addMessage(`🎉 축하합니다! 음료수에 당첨되었습니다! 🎉`);
-      // Only reset pity if the threshold was NOT already reached.
-      if (pityProgress < PITY_THRESHOLD) {
+      // If pity threshold is reached, a win consumes one pity charge.
+      // Otherwise, a lucky win resets the progress.
+      if (pityProgress >= PITY_THRESHOLD) {
+        setPityProgress(prev => prev - PITY_THRESHOLD);
+      } else {
         setPityProgress(0);
       }
       return true;
