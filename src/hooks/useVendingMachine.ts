@@ -35,28 +35,33 @@ export const useVendingMachine = () => {
   };
 
   const performDraw = (cost: number, chance: number): boolean => {
+    const wasLuckyWin = Math.random() < chance;
+    let wasPityWin = false;
+
     setBalance(prev => prev - cost);
 
-    if (Math.random() < chance) {
-      addMessage(`🎉 축하합니다! 음료수에 당첨되었습니다! 🎉`);
-      if (pityProgress >= PITY_THRESHOLD) {
-        setPityProgress(prev => prev - PITY_THRESHOLD);
-      } else {
-        setPityProgress(0);
-      }
-      return true;
-    } else {
-      addMessage("아쉽지만... 꽝입니다. 😢");
-      const newPityProgress = pityProgress + cost;
-      if (newPityProgress >= PITY_THRESHOLD) {
-        addMessage('천장 도달! 음료수가 나옵니다!');
-        setPityProgress(newPityProgress - PITY_THRESHOLD);
-        return true;
-      } else {
-        setPityProgress(newPityProgress);
-        return false;
-      }
-    }
+    setPityProgress(prevPity => {
+        if (wasLuckyWin) {
+            addMessage(`🎉 축하합니다! 음료수에 당첨되었습니다! 🎉`);
+            if (prevPity >= PITY_THRESHOLD) {
+                return prevPity - PITY_THRESHOLD;
+            } else {
+                return 0;
+            }
+        } else { // Loss
+            addMessage("아쉽지만... 꽝입니다. 😢");
+            const newPity = prevPity + cost;
+            if (newPity >= PITY_THRESHOLD) {
+                addMessage('천장 도달! 음료수가 나옵니다!');
+                wasPityWin = true;
+                return newPity - PITY_THRESHOLD;
+            } else {
+                return newPity;
+            }
+        }
+    });
+
+    return wasLuckyWin || wasPityWin;
   };
 
   const drawOne = (): number => {
