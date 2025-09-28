@@ -19,7 +19,6 @@ function App() {
     balance,
     pityProgress,
     messages,
-    isDrawing,
     addMessage,
     insertMoney,
     returnChange,
@@ -100,11 +99,11 @@ function App() {
           </div>
 
           <div className="draw-buttons">
-            <button onClick={() => handleDraw(drawOne)} disabled={isDrawing || balance < constants.BIG_DRAW_COST}>1회 뽑기 ({constants.BIG_DRAW_COST}원)</button>
-            <button onClick={() => handleDraw(drawTen)} disabled={isDrawing || balance < constants.TEN_DRAW_COST}>10회 뽑기 ({constants.TEN_DRAW_COST}원)</button>
-            <button onClick={() => handleDraw(miniDraw)} disabled={isDrawing || balance < constants.MINI_DRAW_COST}>미니 뽑기 ({constants.MINI_DRAW_COST}원)</button>
-            <button onClick={() => handleDraw(purchaseGuaranteed)} disabled={isDrawing || balance < constants.GUARANTEED_PURCHASE_COST}>확정 구매 ({constants.GUARANTEED_PURCHASE_COST}원)</button>
-            <button className="pity-draw-button" onClick={() => handleDraw(pityDraw)} disabled={isDrawing || pityProgress < constants.PITY_THRESHOLD}>천장 뽑기 (무료)</button>
+            <button onClick={() => handleDraw(drawOne)} disabled={balance < constants.BIG_DRAW_COST}>1회 뽑기 ({constants.BIG_DRAW_COST}원)</button>
+            <button onClick={() => handleDraw(drawTen)} disabled={balance < constants.TEN_DRAW_COST}>10회 뽑기 ({constants.TEN_DRAW_COST}원)</button>
+            <button onClick={() => handleDraw(miniDraw)} disabled={balance < constants.MINI_DRAW_COST}>미니 뽑기 ({constants.MINI_DRAW_COST}원)</button>
+            <button onClick={() => handleDraw(purchaseGuaranteed)} disabled={balance < constants.GUARANTEED_PURCHASE_COST}>확정 구매 ({constants.GUARANTEED_PURCHASE_COST}원)</button>
+            <button className="pity-draw-button" onClick={() => handleDraw(pityDraw)} disabled={pityProgress < constants.PITY_THRESHOLD}>천장 뽑기 (무료)</button>
           </div>
 
           <div className="money-insert-section">
@@ -120,7 +119,7 @@ function App() {
           </div>
 
           <div className="return-change-section">
-            <button onClick={returnChange} disabled={isDrawing || balance === 0}>잔액 반환</button>
+            <button onClick={returnChange} disabled={balance === 0}>잔액 반환</button>
           </div>
 
            <div className="message-box">

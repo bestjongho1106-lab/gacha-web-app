@@ -13,7 +13,6 @@ export const useVendingMachine = () => {
   const [balance, setBalance] = useState(0);
   const [pityProgress, setPityProgress] = useState(0);
   const [messages, setMessages] = useState<string[]>([]);
-  const [isDrawing, setIsDrawing] = useState(false);
 
   const addMessage = useCallback((msg: string) => {
     setMessages(prev => [msg, ...prev.slice(0, 4)]);
@@ -25,7 +24,6 @@ export const useVendingMachine = () => {
   };
 
   const returnChange = () => {
-    if (isDrawing) return;
     if (balance > 0) {
       addMessage(`${balance}원이 반환되었습니다.`);
       setBalance(0);
@@ -35,23 +33,32 @@ export const useVendingMachine = () => {
   };
 
   const performDraw = (cost: number, chance: number): boolean => {
+    if (balance < cost) {
+      addMessage(`금액이 부족합니다. ${cost}원이 필요합니다.`);
+      return false;
+    }
+
     setBalance(prev => prev - cost);
 
-    if (Math.random() < chance) {
+    if (Math.random() < chance) { // Lucky Win
       addMessage(`🎉 축하합니다! 음료수에 당첨되었습니다! 🎉`);
+      // If pity threshold is reached, a lucky win still consumes one pity charge.
+      // Otherwise, a lucky win resets the progress.
       if (pityProgress >= PITY_THRESHOLD) {
         setPityProgress(prev => prev - PITY_THRESHOLD);
       } else {
         setPityProgress(0);
       }
       return true;
-    } else {
+    } else { // Loss
       addMessage("아쉽지만... 꽝입니다. 😢");
       const newPityProgress = pityProgress + cost;
+
+      // Check if the loss triggers a pity win
       if (newPityProgress >= PITY_THRESHOLD) {
         addMessage('천장 도달! 음료수가 나옵니다!');
         setPityProgress(newPityProgress - PITY_THRESHOLD);
-        return true;
+        return true; // A pity win is still a win
       } else {
         setPityProgress(newPityProgress);
         return false;
@@ -60,103 +67,56 @@ export const useVendingMachine = () => {
   };
 
   const drawOne = (): number => {
-    if (isDrawing) return 0;
-    if (balance < BIG_DRAW_COST) {
-      addMessage(`금액이 부족합니다. ${BIG_DRAW_COST}원이 필요합니다.`);
-      return 0;
-    }
-    setIsDrawing(true);
     addMessage(`${BIG_DRAW_COST}원을 사용하여 뽑기를 진행합니다...`);
-    const wins = performDraw(BIG_DRAW_COST, BIG_DRAW_CHANCE) ? 1 : 0;
-    setTimeout(() => setIsDrawing(false), 100);
-    return wins;
+    return performDraw(BIG_DRAW_COST, BIG_DRAW_CHANCE) ? 1 : 0;
   };
 
   const drawTen = (): number => {
-    if (isDrawing) return 0;
     if (balance < TEN_DRAW_COST) {
       addMessage(`금액이 부족합니다. ${TEN_DRAW_COST}원이 필요합니다.`);
       return 0;
     }
-    setIsDrawing(true);
     addMessage(`--- 10연차 뽑기를 시작합니다! ---`);
-    
-    let wins = 0;
-    let currentPity = pityProgress;
-    
+    let totalWins = 0;
     for (let i = 0; i < 10; i++) {
-        if (Math.random() < BIG_DRAW_CHANCE) {
-            addMessage(`🎉 (10연차) 축하합니다! 🎉`);
-            wins++;
-            if (currentPity >= PITY_THRESHOLD) {
-                currentPity -= PITY_THRESHOLD;
-            } else {
-                currentPity = 0;
-            }
-        } else {
-            addMessage(`(10연차) 아쉽지만... 꽝. 😢`);
-            currentPity += BIG_DRAW_COST;
-            if (currentPity >= PITY_THRESHOLD) {
-                addMessage('(10연차) 천장 도달! ✨');
-                wins++;
-                currentPity -= PITY_THRESHOLD;
-            }
+        if(performDraw(BIG_DRAW_COST, BIG_DRAW_CHANCE)) {
+            totalWins++;
         }
     }
-
-    setBalance(prev => prev - TEN_DRAW_COST);
-    setPityProgress(currentPity);
-
-    addMessage(`--- 10연차 결과: 총 ${wins}개 당첨! ---`);
-    setTimeout(() => setIsDrawing(false), 100);
-    return wins;
+    addMessage(`--- 10연차 결과: 총 ${totalWins}개 당첨! ---`);
+    return totalWins;
   };
 
   const miniDraw = (): number => {
-    if (isDrawing) return 0;
-    if (balance < MINI_DRAW_COST) {
-      addMessage(`금액이 부족합니다. ${MINI_DRAW_COST}원이 필요합니다.`);
-      return 0;
-    }
-    setIsDrawing(true);
     addMessage(`${MINI_DRAW_COST}원을 사용하여 미니 뽑기를 진행합니다...`);
-    const wins = performDraw(MINI_DRAW_COST, MINI_DRAW_CHANCE) ? 1 : 0;
-    setTimeout(() => setIsDrawing(false), 100);
-    return wins;
+    return performDraw(MINI_DRAW_COST, MINI_DRAW_CHANCE) ? 1 : 0;
   };
 
   const purchaseGuaranteed = (): number => {
-    if (isDrawing) return 0;
     if (balance < GUARANTEED_PURCHASE_COST) {
       addMessage(`금액이 부족합니다. ${GUARANTEED_PURCHASE_COST}원이 필요합니다.`);
       return 0;
     }
-    setIsDrawing(true);
     setBalance(prev => prev - GUARANTEED_PURCHASE_COST);
     addMessage(`✨ ${GUARANTEED_PURCHASE_COST}원을 사용하여 확정 음료를 구매합니다. ✨`);
-    setTimeout(() => setIsDrawing(false), 100);
     return 1;
   };
 
   const pityDraw = (): number => {
-    if (isDrawing) return 0;
     if (pityProgress < PITY_THRESHOLD) {
         addMessage('천장 조건 미달입니다.');
         return 0;
     }
-    setIsDrawing(true);
     addMessage('천장 도달! 무료 확정 뽑기를 진행합니다!');
     setPityProgress(prev => prev - PITY_THRESHOLD);
-    setTimeout(() => setIsDrawing(false), 100);
     return 1;
-  };
+  }
 
   return {
     balance,
     pityProgress,
     messages,
-    isDrawing,
-    addMessage,
+    addMessage, // <-- Export this function
     insertMoney,
     returnChange,
     drawOne,
