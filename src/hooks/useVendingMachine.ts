@@ -143,18 +143,7 @@ export const useVendingMachine = () => {
     return 1;
   };
 
-  const pityDraw = (): number => {
-    if (isDrawing) return 0;
-    if (pityProgress < PITY_THRESHOLD) {
-        addMessage('천장 조건 미달입니다.');
-        return 0;
-    }
-    setIsDrawing(true);
-    addMessage('천장 도달! 무료 확정 뽑기를 진행합니다!');
-    setPityProgress(prev => prev - PITY_THRESHOLD);
-    setTimeout(() => setIsDrawing(false), 100);
-    return 1;
-  };
+
 
   return {
     balance,
@@ -168,7 +157,7 @@ export const useVendingMachine = () => {
     drawTen,
     miniDraw,
     purchaseGuaranteed,
-    pityDraw,
+
     constants: {
         BIG_DRAW_COST,
         TEN_DRAW_COST,

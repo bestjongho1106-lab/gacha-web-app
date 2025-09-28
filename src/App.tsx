@@ -27,7 +27,7 @@ function App() {
     drawTen,
     miniDraw,
     purchaseGuaranteed,
-    pityDraw,
+
     constants
   } = useVendingMachine();
 
@@ -104,7 +104,7 @@ function App() {
             <button onClick={() => handleDraw(drawTen)} disabled={isDrawing || balance < constants.TEN_DRAW_COST}>10회 뽑기 ({constants.TEN_DRAW_COST}원)</button>
             <button onClick={() => handleDraw(miniDraw)} disabled={isDrawing || balance < constants.MINI_DRAW_COST}>미니 뽑기 ({constants.MINI_DRAW_COST}원)</button>
             <button onClick={() => handleDraw(purchaseGuaranteed)} disabled={isDrawing || balance < constants.GUARANTEED_PURCHASE_COST}>확정 구매 ({constants.GUARANTEED_PURCHASE_COST}원)</button>
-            <button className="pity-draw-button" onClick={() => handleDraw(pityDraw)} disabled={isDrawing || pityProgress < constants.PITY_THRESHOLD}>천장 뽑기 (무료)</button>
+
           </div>
 
           <div className="money-insert-section">
